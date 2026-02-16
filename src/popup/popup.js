@@ -2,13 +2,24 @@ import { getFromStorage, setToStorage } from '../utils/storage.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const emailInput = document.getElementById('email');
+  const nameInput = document.getElementById('studentName');
+  const handleInput = document.getElementById('githubHandle');
   const groupInput = document.getElementById('groupName');
   const githubBtn = document.getElementById('github-btn');
   const githubStatus = document.getElementById('github-status');
   const form = document.getElementById('config-form');
 
-  const { email, groupName, groupSheetId, githubConnected } = await getFromStorage(['email', 'groupName', 'groupSheetId', 'githubConnected']);
+  const { email, studentName, githubHandle, groupName, groupSheetId, githubConnected } = await getFromStorage([
+    'email',
+    'studentName',
+    'githubHandle',
+    'groupName',
+    'groupSheetId',
+    'githubConnected'
+  ]);
   if (email) emailInput.value = email;
+  if (studentName) nameInput.value = studentName;
+  if (githubHandle) handleInput.value = githubHandle;
   if (groupName) groupInput.value = groupName;
   else if (groupSheetId) groupInput.value = groupSheetId;
   if (githubConnected) {
@@ -23,6 +34,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
     await setToStorage({
       email: emailInput.value.trim(),
+      studentName: nameInput.value.trim(),
+      githubHandle: handleInput.value.trim(),
       groupName: groupInput.value.trim()
     });
     alert('Settings saved');
@@ -30,12 +43,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   githubBtn.addEventListener('click', () => {
     const email = emailInput.value.trim();
+    const studentName = nameInput.value.trim();
+    const githubHandle = handleInput.value.trim();
     const group = groupInput.value.trim();
-    if (!email || !group) {
-      alert('Please enter email and group name first');
+    if (!email || !studentName || !githubHandle || !group) {
+      alert('Please enter email, full name, GitHub handle, and group name first');
       return;
     }
-    const authUrl = `https://a2sv-companion-backend.onrender.com/api/auth/github?email=${encodeURIComponent(email)}&groupName=${encodeURIComponent(group)}&extensionId=${chrome.runtime.id}`;
+    const authUrl = `https://a2sv-companion-backend.onrender.com/api/auth/github?email=${encodeURIComponent(email)}&groupName=${encodeURIComponent(group)}&studentName=${encodeURIComponent(studentName)}&githubHandle=${encodeURIComponent(githubHandle)}&extensionId=${chrome.runtime.id}`;
     chrome.tabs.create({ url: authUrl });
     window.close();
   });

@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ ok: true });
   }
   if (message.type === 'GET_CONFIG') {
-    chrome.storage.local.get(['email', 'groupName', 'groupSheetId', 'githubConnected'], sendResponse);
+    chrome.storage.local.get(['email', 'studentName', 'githubHandle', 'groupName', 'groupSheetId', 'githubConnected'], sendResponse);
     return true;
   }
 });
