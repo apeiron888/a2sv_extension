@@ -79,7 +79,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const repoParam = repoName ? `&repoName=${encodeURIComponent(repoName)}` : '';
     const authUrl = `https://a2sv-companion.onrender.com/api/auth/github?email=${encodeURIComponent(email)}&groupName=${encodeURIComponent(group)}&studentName=${encodeURIComponent(studentName)}&githubHandle=${encodeURIComponent(githubHandle)}${repoParam}`;
     chrome.tabs.create({ url: authUrl });
-    window.close();
+    if (window.location.pathname.endsWith('popup.html')) {
+      window.close();
+    }
   });
 
   chrome.runtime.onMessage.addListener((message) => {
