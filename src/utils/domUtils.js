@@ -1,4 +1,3 @@
-// Wait for an element to appear in the DOM
 export function waitForElement(selector, timeout = 10000) {
   return new Promise((resolve, reject) => {
     if (document.querySelector(selector)) {
@@ -18,7 +17,6 @@ export function waitForElement(selector, timeout = 10000) {
   });
 }
 
-// Extract problem title from LeetCode
 export function getLeetCodeTitle() {
   const selectors = [
     '[data-cy="question-title"]',
@@ -32,14 +30,11 @@ export function getLeetCodeTitle() {
   return null;
 }
 
-// Extract code from LeetCode editor
 export function getLeetCodeCode() {
-  // Try Monaco editor
   if (window.monaco && window.monaco.editor) {
     const models = window.monaco.editor.getModels();
     if (models.length) return models[0].getValue();
   }
-  // Fallback: hidden textarea
   const textarea = document.querySelector('textarea[data-cy="code-area"]');
   if (textarea) return textarea.value;
   return null;

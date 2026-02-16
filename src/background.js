@@ -1,10 +1,9 @@
-const BACKEND_URL = 'https://a2sv-companion.onrender.com';
+const BACKEND_URL = 'https://a2sv-companion-backend.onrender.com';
 
-// Handle messages from content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'SUBMIT') {
     handleSubmit(message.data).then(sendResponse);
-    return true; // async response
+    return true;
   }
   if (message.type === 'FETCH_CF_CODE') {
     fetchCodeforcesCode(message.contestId, message.submissionId).then(sendResponse);
@@ -15,9 +14,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ ok: true });
   }
   if (message.type === 'GET_CONFIG') {
-    chrome.storage.local.get(['email', 'groupSheetId', 'githubConnected'], (result) => {
-      sendResponse(result);
-    });
+    chrome.storage.local.get(['email', 'groupName', 'groupSheetId', 'githubConnected'], sendResponse);
     return true;
   }
 });
@@ -40,10 +37,8 @@ async function fetchCodeforcesCode(contestId, submissionId) {
   try {
     const response = await fetch(url, { credentials: 'include' });
     const html = await response.text();
-    // Extract code from <pre id="program-source-text">
     const match = html.match(/<pre[^>]*id="program-source-text"[^>]*>([\s\S]*?)<\/pre>/i);
     if (match) {
-      // Decode HTML entities
       const text = match[1].replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"');
       return { code: text };
     }

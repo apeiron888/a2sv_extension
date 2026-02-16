@@ -1,4 +1,3 @@
-// Wrapper for chrome.storage.local
 export async function getFromStorage(keys) {
   return new Promise((resolve) => {
     chrome.storage.local.get(keys, resolve);
@@ -22,5 +21,5 @@ export async function incrementAttempt(platform, problemSlug) {
 export async function getAttempt(platform, problemSlug) {
   const key = `attempt_${platform}_${problemSlug}`;
   const { [key]: value } = await getFromStorage([key]);
-  return value || 1; // default to 1 if not set
+  return value || 1;
 }

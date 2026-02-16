@@ -7,13 +7,14 @@
   "host_permissions": [
     "https://leetcode.com/*",
     "https://codeforces.com/*",
-    "https://a2sv-companion.onrender.com/*"
+    "https://a2sv-companion.onrender.com/*",
+    "https://a2sv-companion-backend.onrender.com/*"
   ],
   "background": {
-    "service_worker": "src/background.js"
+    "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "src/popup/popup.html",
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
@@ -23,14 +24,8 @@
   "content_scripts": [
     {
       "matches": ["https://leetcode.com/problems/*"],
-      "js": [
-        "src/utils/storage.js",
-        "src/utils/api.js",
-        "src/utils/domUtils.js",
-        "src/content/shared.js",
-        "src/content/leetcode.js"
-      ],
-      "css": ["src/content/inject.css"],
+      "js": ["leetcode.js"],
+      "css": ["inject.css"],
       "run_at": "document_end"
     },
     {
@@ -39,20 +34,14 @@
         "https://codeforces.com/problemset/problem/*",
         "https://codeforces.com/contest/*/my"
       ],
-      "js": [
-        "src/utils/storage.js",
-        "src/utils/api.js",
-        "src/utils/domUtils.js",
-        "src/content/shared.js",
-        "src/content/codeforces.js"
-      ],
-      "css": ["src/content/inject.css"],
+      "js": ["codeforces.js"],
+      "css": ["inject.css"],
       "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["src/content/fallback.html"],
+      "resources": ["fallback.html"],
       "matches": ["<all_urls>"]
     }
   ],

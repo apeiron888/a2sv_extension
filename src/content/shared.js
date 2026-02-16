@@ -3,7 +3,6 @@ import { submitSolution } from '../utils/api.js';
 
 let fallbackPanel = null;
 
-// Show a temporary toast notification
 export function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.textContent = message;
@@ -19,7 +18,6 @@ export function showToast(message, type = 'info') {
   setTimeout(() => toast.remove(), 3000);
 }
 
-// Create the floating fallback panel
 export function createFallbackPanel() {
   if (fallbackPanel) return fallbackPanel;
 
@@ -35,7 +33,7 @@ export function createFallbackPanel() {
   container.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
   container.style.zIndex = '10001';
   container.style.padding = '10px';
-  container.style.display = 'none'; // initially hidden
+  container.style.display = 'none';
 
   container.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -55,31 +53,31 @@ export function createFallbackPanel() {
 
   document.body.appendChild(container);
 
-  const hideBtn = container.querySelector('#a2sv-fallback-hide');
-  hideBtn.addEventListener('click', () => {
+  container.querySelector('#a2sv-fallback-hide').addEventListener('click', () => {
     container.style.display = 'none';
   });
 
-  const submitBtn = container.querySelector('#a2sv-fallback-submit');
-  submitBtn.addEventListener('click', async () => {
+  container.querySelector('#a2sv-fallback-submit').addEventListener('click', async () => {
     const trial = parseInt(container.querySelector('#a2sv-fallback-trial').value, 10);
     const time = parseInt(container.querySelector('#a2sv-fallback-time').value, 10);
     const code = container.querySelector('#a2sv-fallback-code').value;
-    const problemTitle = document.title.split(' - ')[0]; // naive
+    const problemTitle = document.title.split(' - ')[0];
 
     if (!code) {
       showToast('Please enter code', 'error');
       return;
     }
 
-    const { email, groupSheetId } = await getFromStorage(['email', 'groupSheetId']);
-    if (!email || !groupSheetId) {
+    const { email, groupName, groupSheetId } = await getFromStorage(['email', 'groupName', 'groupSheetId']);
+    const group = groupName || groupSheetId;
+    if (!email || !group) {
       showToast('Please configure extension first', 'error');
       return;
     }
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting...';
+    const btn = container.querySelector('#a2sv-fallback-submit');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
 
     try {
       const res = await submitSolution({
@@ -99,8 +97,8 @@ export function createFallbackPanel() {
     } catch (err) {
       showToast(err.message, 'error');
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit';
+      btn.disabled = false;
+      btn.textContent = 'Submit';
     }
   });
 
@@ -108,7 +106,6 @@ export function createFallbackPanel() {
   return container;
 }
 
-// Show the fallback panel (with optional pre-filled data)
 export function showFallbackPanel(data = {}) {
   const panel = createFallbackPanel();
   if (data.trial) panel.querySelector('#a2sv-fallback-trial').value = data.trial;

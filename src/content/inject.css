@@ -1,4 +1,3 @@
-/* LeetCode specific styles (if needed) */
 .a2sv-sync-container input,
 .a2sv-sync-container button {
   font-family: inherit;
@@ -8,7 +7,6 @@
   font-size: 14px;
 }
 
-/* Fallback panel styling */
 #a2sv-fallback-panel {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
