@@ -22,6 +22,7 @@ module.exports = {
         { from: 'src/popup/popup.css', to: 'popup.css' },
         { from: 'src/content/inject.css', to: 'inject.css' },
         { from: 'src/content/fallback.html', to: 'fallback.html' },
+        { from: 'src/content/leetcodeCodeInjector.js', to: 'leetcodeCodeInjector.js' },
         { from: 'src/pages', to: 'pages' },
       ],
     }),

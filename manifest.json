@@ -41,7 +41,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["fallback.html"],
+      "resources": ["fallback.html", "leetcodeCodeInjector.js"],
       "matches": ["<all_urls>"]
     }
   ],
