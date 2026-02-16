@@ -12,11 +12,17 @@ import { showToast, showFallbackPanel } from './shared.js';
     const group = config.groupName || config.groupSheetId;
     if (!config.email || !group || !config.githubConnected) return;
 
+    const submitButton = submitContainer.tagName === 'BUTTON'
+      ? submitContainer
+      : submitContainer.querySelector('button');
+
     const syncContainer = document.createElement('div');
     syncContainer.className = 'a2sv-sync-container';
     syncContainer.style.display = 'flex';
     syncContainer.style.alignItems = 'center';
+    syncContainer.style.gap = '6px';
     syncContainer.style.marginLeft = '8px';
+    syncContainer.style.padding = '2px 4px';
 
     const trialInput = document.createElement('input');
     trialInput.type = 'number';
@@ -24,27 +30,43 @@ import { showToast, showFallbackPanel } from './shared.js';
     trialInput.value = '1';
     trialInput.placeholder = 'Trial #';
     trialInput.style.width = '70px';
-    trialInput.style.marginRight = '4px';
-    trialInput.className = submitContainer.querySelector('button')?.className || '';
+    trialInput.style.marginRight = '0';
+    trialInput.style.padding = '4px 6px';
+    trialInput.style.borderRadius = '6px';
+    trialInput.style.border = '1px solid var(--border-tertiary, #d0d7de)';
 
     const timeInput = document.createElement('input');
     timeInput.type = 'number';
     timeInput.min = '0';
     timeInput.placeholder = 'Min';
     timeInput.style.width = '60px';
-    timeInput.style.marginRight = '4px';
-    timeInput.className = trialInput.className;
+    timeInput.style.marginRight = '0';
+    timeInput.style.padding = '4px 6px';
+    timeInput.style.borderRadius = '6px';
+    timeInput.style.border = '1px solid var(--border-tertiary, #d0d7de)';
 
     const syncButton = document.createElement('button');
     syncButton.textContent = 'Sync';
-    syncButton.className = submitContainer.querySelector('button')?.className || '';
-    syncButton.style.marginLeft = '4px';
+    syncButton.className = submitButton?.className || '';
+    syncButton.style.marginLeft = '0';
+
+    const fallbackButton = document.createElement('button');
+    fallbackButton.type = 'button';
+    fallbackButton.textContent = 'Fallback';
+    fallbackButton.className = submitButton?.className || '';
 
     syncContainer.appendChild(trialInput);
     syncContainer.appendChild(timeInput);
     syncContainer.appendChild(syncButton);
+    syncContainer.appendChild(fallbackButton);
 
-    submitContainer.parentElement.appendChild(syncContainer);
+    const submitWrapper = submitContainer.parentElement;
+    if (submitWrapper) {
+      submitWrapper.style.display = 'flex';
+      submitWrapper.style.alignItems = 'center';
+      submitWrapper.style.gap = '8px';
+      submitWrapper.appendChild(syncContainer);
+    }
 
     const problemSlug = window.location.pathname.split('/')[2];
 
@@ -58,7 +80,8 @@ import { showToast, showFallbackPanel } from './shared.js';
       const time = parseInt(timeInput.value, 10);
 
       if (!code) {
-        showToast('Could not extract code. Please use fallback.', 'error');
+        showToast('Could not extract code. Opening fallback panel...', 'error');
+        showFallbackPanel({ trial, time });
         syncButton.disabled = false;
         syncButton.textContent = 'Sync';
         return;
@@ -86,6 +109,13 @@ import { showToast, showFallbackPanel } from './shared.js';
         syncButton.disabled = false;
         syncButton.textContent = 'Sync';
       }
+    });
+
+    fallbackButton.addEventListener('click', () => {
+      showFallbackPanel({
+        trial: parseInt(trialInput.value, 10),
+        time: parseInt(timeInput.value, 10)
+      });
     });
 
     const storedTrial = await getAttempt('leetcode', problemSlug);

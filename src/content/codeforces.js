@@ -26,10 +26,38 @@ import { showToast, showFallbackPanel } from './shared.js';
       if (!actionsCell) continue;
       if (actionsCell.querySelector('.a2sv-sync-btn')) continue;
 
+      actionsCell.style.display = 'flex';
+      actionsCell.style.alignItems = 'center';
+      actionsCell.style.gap = '8px';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'a2sv-sync-wrapper';
+      wrapper.style.display = 'flex';
+      wrapper.style.alignItems = 'center';
+      wrapper.style.gap = '6px';
+
+      const trialInput = document.createElement('input');
+      trialInput.type = 'number';
+      trialInput.min = '1';
+      trialInput.value = '1';
+      trialInput.placeholder = 'Trial #';
+      trialInput.style.width = '70px';
+      trialInput.style.padding = '2px 6px';
+      trialInput.style.border = '1px solid #aaa';
+      trialInput.style.borderRadius = '4px';
+
+      const timeInput = document.createElement('input');
+      timeInput.type = 'number';
+      timeInput.min = '0';
+      timeInput.placeholder = 'Min';
+      timeInput.style.width = '60px';
+      timeInput.style.padding = '2px 6px';
+      timeInput.style.border = '1px solid #aaa';
+      timeInput.style.borderRadius = '4px';
+
       const syncBtn = document.createElement('button');
       syncBtn.textContent = '⚡ Sync';
       syncBtn.className = 'a2sv-sync-btn';
-      syncBtn.style.marginLeft = '8px';
       syncBtn.style.cursor = 'pointer';
       syncBtn.style.border = '1px solid #aaa';
       syncBtn.style.borderRadius = '4px';
@@ -58,10 +86,10 @@ import { showToast, showFallbackPanel } from './shared.js';
         e.stopPropagation();
 
         syncBtn.disabled = true;
-        syncBtn.textContent = '...';
+        syncBtn.textContent = 'Syncing...';
 
-        const trial = await getAttempt('codeforces', problemSlug);
-        showFallbackPanel({ trial, problemTitle: problemName, platform: 'codeforces' });
+        const trial = parseInt(trialInput.value, 10) || 1;
+        const time = parseInt(timeInput.value, 10) || 0;
 
         if (!contestId || !submissionId) {
           showToast('Missing contest or submission ID', 'error');
@@ -72,30 +100,57 @@ import { showToast, showFallbackPanel } from './shared.js';
 
         chrome.runtime.sendMessage(
           { type: 'FETCH_CF_CODE', contestId, submissionId },
-          (response) => {
-            if (chrome.runtime.lastError) {
-              showToast('Error fetching code', 'error');
-            } else if (response.error) {
-              showToast(response.error, 'error');
-            } else {
-              const panel = document.querySelector('#a2sv-fallback-panel');
-              if (panel) {
-                const codeArea = panel.querySelector('#a2sv-fallback-code');
-                if (codeArea) codeArea.value = response.code;
-              }
+          async (response) => {
+            if (chrome.runtime.lastError || response?.error || !response?.code) {
+              showToast('Could not fetch code. Opening fallback...', 'error');
+              showFallbackPanel({
+                trial,
+                time,
+                problemTitle: problemName,
+                platform: 'codeforces'
+              });
+              syncBtn.disabled = false;
+              syncBtn.textContent = '⚡ Sync';
+              return;
             }
-            syncBtn.disabled = false;
-            syncBtn.textContent = '⚡ Sync';
+
+            try {
+              const res = await submitSolution({
+                platform: 'codeforces',
+                problemTitle: problemName,
+                code: response.code,
+                timeTaken: time,
+                trial,
+                language: 'unknown'
+              });
+              if (res.success) {
+                showToast('Synced!');
+                await incrementAttempt('codeforces', problemSlug);
+                trialInput.value = (trial + 1).toString();
+              } else {
+                showToast(res.error || 'Error', 'error');
+              }
+            } catch (err) {
+              showToast(err.message, 'error');
+            } finally {
+              syncBtn.disabled = false;
+              syncBtn.textContent = '⚡ Sync';
+            }
           }
         );
       });
 
-      actionsCell.appendChild(syncBtn);
+      const storedTrial = await getAttempt('codeforces', problemSlug);
+      trialInput.value = storedTrial;
+
+      wrapper.appendChild(trialInput);
+      wrapper.appendChild(timeInput);
+      wrapper.appendChild(syncBtn);
+      actionsCell.appendChild(wrapper);
     }
 
     window.__a2svInjected = true;
   } catch (err) {
-    console.warn('A2SV Codeforces injection failed, using fallback', err);
-    setTimeout(() => showFallbackPanel(), 2000);
+    console.warn('A2SV Codeforces injection failed', err);
   }
 })();

@@ -33,9 +33,21 @@ export function getLeetCodeTitle() {
 export function getLeetCodeCode() {
   if (window.monaco && window.monaco.editor) {
     const models = window.monaco.editor.getModels();
-    if (models.length) return models[0].getValue();
+    if (models.length) {
+      const withContent = models
+        .map((model) => ({ model, value: model.getValue() }))
+        .filter((item) => item.value && item.value.trim().length > 0)
+        .sort((a, b) => b.value.length - a.value.length);
+      if (withContent.length) return withContent[0].value;
+      return models[0].getValue();
+    }
   }
   const textarea = document.querySelector('textarea[data-cy="code-area"]');
   if (textarea) return textarea.value;
+  const legacyEditor = document.querySelector('.monaco-editor');
+  if (legacyEditor && window.monaco && window.monaco.editor) {
+    const models = window.monaco.editor.getModels();
+    if (models.length) return models[0].getValue();
+  }
   return null;
 }
