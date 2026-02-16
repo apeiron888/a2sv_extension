@@ -1,4 +1,4 @@
-const BACKEND_URL = 'https://a2sv-companion-backend.onrender.com';
+const BACKEND_URL = 'https://a2sv-companion.onrender.com';
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'SUBMIT') {

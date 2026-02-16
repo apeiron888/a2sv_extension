@@ -7,8 +7,7 @@
   "host_permissions": [
     "https://leetcode.com/*",
     "https://codeforces.com/*",
-    "https://a2sv-companion.onrender.com/*",
-    "https://a2sv-companion-backend.onrender.com/*"
+    "https://a2sv-companion.onrender.com/*"
   ],
   "background": {
     "service_worker": "background.js"

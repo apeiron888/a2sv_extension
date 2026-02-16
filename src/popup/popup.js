@@ -25,13 +25,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (repoName) repoInput.value = repoName;
   if (groupName) groupInput.value = groupName;
   else if (groupSheetId) groupInput.value = groupSheetId;
-  if (githubConnected) {
-    githubStatus.textContent = '✓ Connected';
-    githubStatus.style.color = 'green';
-  } else {
-    githubStatus.textContent = 'Not connected';
-    githubStatus.style.color = 'red';
-  }
+  const setGithubStatus = (connected) => {
+    if (connected) {
+      githubStatus.textContent = '✓ Connected';
+      githubStatus.style.color = 'green';
+    } else {
+      githubStatus.textContent = 'Not connected';
+      githubStatus.style.color = 'red';
+    }
+  };
+
+  setGithubStatus(!!githubConnected);
+
+  const refreshGithubStatus = async () => {
+    const email = emailInput.value.trim();
+    if (!email) return;
+    try {
+      const res = await fetch(`https://a2sv-companion.onrender.com/api/auth/github/status?email=${encodeURIComponent(email)}`);
+      const data = await res.json();
+      if (res.ok) {
+        await setToStorage({ githubConnected: !!data.connected });
+        setGithubStatus(!!data.connected);
+      }
+    } catch (err) {
+      // ignore network errors in popup
+    }
+  };
+
+  refreshGithubStatus();
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -56,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
     const repoParam = repoName ? `&repoName=${encodeURIComponent(repoName)}` : '';
-    const authUrl = `https://a2sv-companion-backend.onrender.com/api/auth/github?email=${encodeURIComponent(email)}&groupName=${encodeURIComponent(group)}&studentName=${encodeURIComponent(studentName)}&githubHandle=${encodeURIComponent(githubHandle)}${repoParam}&extensionId=${chrome.runtime.id}`;
+    const authUrl = `https://a2sv-companion.onrender.com/api/auth/github?email=${encodeURIComponent(email)}&groupName=${encodeURIComponent(group)}&studentName=${encodeURIComponent(studentName)}&githubHandle=${encodeURIComponent(githubHandle)}${repoParam}`;
     chrome.tabs.create({ url: authUrl });
     window.close();
   });

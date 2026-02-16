@@ -1,6 +1,6 @@
 import { getFromStorage } from './storage.js';
 
-const BACKEND_URL = 'https://a2sv-companion-backend.onrender.com';
+const BACKEND_URL = 'https://a2sv-companion.onrender.com';
 
 export async function submitSolution(data) {
   const { email, groupName, groupSheetId, githubConnected } = await getFromStorage(['email', 'groupName', 'groupSheetId', 'githubConnected']);
