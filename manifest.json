@@ -37,6 +37,18 @@
       "js": ["codeforces.js"],
       "css": ["inject.css"],
       "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://atcoder.jp/*",
+        "https://www.hackerrank.com/challenges/*",
+        "https://www.hackerrank.com/contests/*/challenges/*",
+        "https://practice.geeksforgeeks.org/problems/*",
+        "https://www.geeksforgeeks.org/problems/*"
+      ],
+      "js": ["fallbackGeneric.js"],
+      "css": ["inject.css"],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [

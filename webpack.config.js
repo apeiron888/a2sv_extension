@@ -7,6 +7,7 @@ module.exports = {
     background: './src/background.js',
     leetcode: './src/content/leetcode.js',
     codeforces: './src/content/codeforces.js',
+    fallbackGeneric: './src/content/fallbackGeneric.js',
     popup: './src/popup/popup.js',
   },
   output: {
