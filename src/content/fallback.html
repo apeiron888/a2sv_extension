@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 10px;
+      margin: 0;
+    }
+    .panel {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <strong>A2SV Sync</strong>
+    <input type="number" id="trial" placeholder="Trial #" min="1" value="1">
+    <input type="number" id="time" placeholder="Time (min)" min="0">
+    <textarea id="code" rows="5" placeholder="Paste your code here"></textarea>
+    <button id="submit">Submit</button>
+  </div>
+  <script src="fallback.js"></script>
+</body>
+</html>

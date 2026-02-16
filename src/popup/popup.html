@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h2>A2SV Companion</h2>
+    <form id="config-form">
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="form-group">
+        <label>Group Sheet ID:</label>
+        <input type="text" id="groupSheetId" required>
+      </div>
+      <div class="form-group">
+        <button type="button" id="github-btn">Connect GitHub</button>
+        <span id="github-status"></span>
+      </div>
+      <div class="form-group">
+        <button type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
