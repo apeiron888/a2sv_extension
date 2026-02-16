@@ -1,6 +1,6 @@
 import { getFromStorage, incrementAttempt, getAttempt } from '../utils/storage.js';
 import { submitSolution } from '../utils/api.js';
-import { waitForElement, getLeetCodeTitle, getLeetCodeCode } from '../utils/domUtils.js';
+import { waitForElement, getLeetCodeTitle, getLeetCodeCodeAsync } from '../utils/domUtils.js';
 import { showToast, showFallbackPanel } from './shared.js';
 
 (async function() {
@@ -75,7 +75,7 @@ import { showToast, showFallbackPanel } from './shared.js';
       syncButton.textContent = 'Syncing...';
 
       const title = getLeetCodeTitle();
-      const code = getLeetCodeCode();
+      const code = await getLeetCodeCodeAsync();
       const trial = parseInt(trialInput.value, 10);
       const time = parseInt(timeInput.value, 10);
 

@@ -27,27 +27,28 @@ export function createFallbackPanel() {
   container.style.bottom = '20px';
   container.style.right = '20px';
   container.style.width = '300px';
-  container.style.backgroundColor = '#fff';
-  container.style.border = '1px solid #ccc';
+  container.style.backgroundColor = '#1e1e1e';
+  container.style.color = '#f5f5f5';
+  container.style.border = '1px solid #333';
   container.style.borderRadius = '8px';
-  container.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+  container.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
   container.style.zIndex = '10001';
   container.style.padding = '10px';
   container.style.display = 'none';
 
   container.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-      <strong>A2SV Sync</strong>
-      <button id="a2sv-fallback-hide" style="border: none; background: none; cursor: pointer;">✖</button>
+      <strong style="color: #f5f5f5;">A2SV Sync</strong>
+      <button id="a2sv-fallback-hide" style="border: none; background: none; color: #f5f5f5; cursor: pointer;">✖</button>
     </div>
-    <div>
-      <label>Trial #</label>
-      <input type="number" id="a2sv-fallback-trial" min="1" value="1" style="width: 100%; margin-bottom: 8px;">
-      <label>Time (min)</label>
-      <input type="number" id="a2sv-fallback-time" min="0" style="width: 100%; margin-bottom: 8px;">
-      <label>Code</label>
-      <textarea id="a2sv-fallback-code" rows="5" style="width: 100%; font-family: monospace;"></textarea>
-      <button id="a2sv-fallback-submit" style="margin-top: 8px; width: 100%; background: #007bff; color: white; border: none; padding: 8px; border-radius: 4px;">Submit</button>
+    <div style="color: #f5f5f5;">
+      <label style="display: block; margin-bottom: 4px;">Trial #</label>
+      <input type="number" id="a2sv-fallback-trial" min="1" value="1" style="width: 100%; margin-bottom: 8px; background: #2b2b2b; color: #f5f5f5; border: 1px solid #444; border-radius: 4px; padding: 6px;">
+      <label style="display: block; margin-bottom: 4px;">Time (min)</label>
+      <input type="number" id="a2sv-fallback-time" min="0" style="width: 100%; margin-bottom: 8px; background: #2b2b2b; color: #f5f5f5; border: 1px solid #444; border-radius: 4px; padding: 6px;">
+      <label style="display: block; margin-bottom: 4px;">Code</label>
+      <textarea id="a2sv-fallback-code" rows="6" style="width: 100%; font-family: monospace; background: #2b2b2b; color: #f5f5f5; border: 1px solid #444; border-radius: 4px; padding: 6px;"></textarea>
+      <button id="a2sv-fallback-submit" style="margin-top: 8px; width: 100%; background: #22c55e; color: #0b0b0b; border: none; padding: 8px; border-radius: 4px; font-weight: 600;">Submit</button>
     </div>
   `;
 

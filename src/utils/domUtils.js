@@ -51,3 +51,54 @@ export function getLeetCodeCode() {
   }
   return null;
 }
+
+export function getLeetCodeCodeAsync(timeout = 2000) {
+  const direct = getLeetCodeCode();
+  if (direct) return Promise.resolve(direct);
+
+  return new Promise((resolve) => {
+    let done = false;
+
+    const handler = (event) => {
+      if (event.source !== window) return;
+      const data = event.data;
+      if (!data || data.source !== 'a2sv' || data.type !== 'LEETCODE_CODE') return;
+      done = true;
+      window.removeEventListener('message', handler);
+      resolve(data.code || null);
+    };
+
+    window.addEventListener('message', handler);
+
+    const script = document.createElement('script');
+    script.textContent = `
+      (function() {
+        try {
+          var code = null;
+          var models = (window.monaco && window.monaco.editor) ? window.monaco.editor.getModels() : [];
+          if (models && models.length) {
+            var values = models.map(function(m) { return m.getValue ? m.getValue() : ''; })
+              .filter(function(v) { return v && v.trim().length > 0; })
+              .sort(function(a, b) { return b.length - a.length; });
+            code = values.length ? values[0] : (models[0].getValue ? models[0].getValue() : null);
+          }
+          if (!code) {
+            var ta = document.querySelector('textarea[data-cy="code-area"]');
+            if (ta && ta.value) code = ta.value;
+          }
+          window.postMessage({ source: 'a2sv', type: 'LEETCODE_CODE', code: code || null }, '*');
+        } catch (e) {
+          window.postMessage({ source: 'a2sv', type: 'LEETCODE_CODE', code: null, error: e.message }, '*');
+        }
+      })();
+    `;
+    (document.head || document.documentElement).appendChild(script);
+    script.remove();
+
+    setTimeout(() => {
+      if (done) return;
+      window.removeEventListener('message', handler);
+      resolve(null);
+    }, timeout);
+  });
+}
