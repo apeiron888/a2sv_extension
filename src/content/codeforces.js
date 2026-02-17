@@ -18,6 +18,11 @@ import { showToast, showFallbackPanel } from './shared.js';
     const rows = table.querySelectorAll('tr[data-submission-id]');
     if (rows.length === 0) throw new Error('No submission rows found');
 
+    const headerRow = table.querySelector('tr');
+    const headerCells = headerRow ? Array.from(headerRow.querySelectorAll('th, td')) : [];
+    const headerIndex = (label) => headerCells.findIndex((cell) => cell.textContent.trim().toLowerCase() === label);
+    const langIndex = headerIndex('lang') >= 0 ? headerIndex('lang') : headerIndex('language');
+
     for (const row of rows) {
       const verdictSpan = row.querySelector('.verdict-accepted');
       if (!verdictSpan) continue;
@@ -80,6 +85,9 @@ import { showToast, showFallbackPanel } from './shared.js';
 
       const problemName = problemLink ? problemLink.textContent.trim() : 'unknown';
       const problemSlug = problemName.toLowerCase().replace(/\s+/g, '-');
+      const problemUrl = problemLink ? new URL(problemLink.getAttribute('href'), window.location.origin).toString() : null;
+      const languageCell = langIndex >= 0 ? row.querySelectorAll('td')[langIndex] : null;
+      const languageText = languageCell ? languageCell.textContent.trim() : '';
 
       syncBtn.addEventListener('click', async (e) => {
         e.preventDefault();
@@ -107,7 +115,8 @@ import { showToast, showFallbackPanel } from './shared.js';
                 trial,
                 time,
                 problemTitle: problemName,
-                platform: 'codeforces'
+                platform: 'codeforces',
+                problemUrl
               });
               syncBtn.disabled = false;
               syncBtn.textContent = '⚡ Sync';
@@ -118,10 +127,11 @@ import { showToast, showFallbackPanel } from './shared.js';
               const res = await submitSolution({
                 platform: 'codeforces',
                 problemTitle: problemName,
+                problemUrl,
                 code: response.code,
                 timeTaken: time,
                 trial,
-                language: 'unknown'
+                language: detectLanguage(languageText)
               });
               if (res.success) {
                 showToast('Synced!');
@@ -154,3 +164,18 @@ import { showToast, showFallbackPanel } from './shared.js';
     console.warn('A2SV Codeforces injection failed', err);
   }
 })();
+
+function detectLanguage(text) {
+  const lang = (text || '').toLowerCase();
+  if (lang.includes('python')) return 'python';
+  if (lang.includes('pypy')) return 'python';
+  if (lang.includes('java')) return 'java';
+  if (lang.includes('c++')) return 'c++';
+  if (lang.includes('javascript')) return 'javascript';
+  if (lang.includes('c#')) return 'c#';
+  if (lang.includes('kotlin')) return 'kotlin';
+  if (lang.includes('go')) return 'go';
+  if (lang.includes('rust')) return 'rust';
+  if (lang.includes('php')) return 'php';
+  return 'unknown';
+}

@@ -78,10 +78,11 @@ import { showToast, showFallbackPanel } from './shared.js';
       const code = await getLeetCodeCodeAsync();
       const trial = parseInt(trialInput.value, 10);
       const time = parseInt(timeInput.value, 10);
+      const problemUrl = window.location.origin + window.location.pathname;
 
       if (!code) {
         showToast('Could not extract code. Opening fallback panel...', 'error');
-        showFallbackPanel({ trial, time });
+        showFallbackPanel({ trial, time, problemTitle: title, platform: 'leetcode', problemUrl });
         syncButton.disabled = false;
         syncButton.textContent = 'Sync';
         return;
@@ -91,6 +92,7 @@ import { showToast, showFallbackPanel } from './shared.js';
         const res = await submitSolution({
           platform: 'leetcode',
           problemTitle: title,
+          problemUrl,
           code,
           timeTaken: time,
           trial,
@@ -114,7 +116,10 @@ import { showToast, showFallbackPanel } from './shared.js';
     fallbackButton.addEventListener('click', () => {
       showFallbackPanel({
         trial: parseInt(trialInput.value, 10),
-        time: parseInt(timeInput.value, 10)
+        time: parseInt(timeInput.value, 10),
+        problemTitle: getLeetCodeTitle(),
+        platform: 'leetcode',
+        problemUrl: window.location.origin + window.location.pathname
       });
     });
 

@@ -43,11 +43,28 @@ async function fetchCodeforcesCode(contestId, submissionId) {
     const html = await response.text();
     const match = html.match(/<pre[^>]*id="program-source-text"[^>]*>([\s\S]*?)<\/pre>/i);
     if (match) {
-      const text = match[1].replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"');
+      let text = match[1];
+      text = text.replace(/<br\s*\/>/gi, '\n');
+      text = text.replace(/<\/pre>/gi, '');
+      text = text.replace(/<[^>]+>/g, '');
+      text = decodeHtmlEntities(text);
       return { code: text };
     }
     return { error: 'Code not found' };
   } catch (err) {
     return { error: err.message };
   }
+}
+
+function decodeHtmlEntities(input) {
+  if (!input) return '';
+  return input
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x27;/g, "'")
+    .replace(/&#x2F;/g, '/')
+    .replace(/&#47;/g, '/');
 }

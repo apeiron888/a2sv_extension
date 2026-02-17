@@ -25,9 +25,20 @@ export function getLeetCodeTitle() {
   ];
   for (const sel of selectors) {
     const el = document.querySelector(sel);
-    if (el) return el.innerText.trim();
+    if (el && el.innerText) return normalizeLeetCodeTitle(el.innerText);
+  }
+  const og = document.querySelector('meta[property="og:title"]')?.getAttribute('content');
+  if (og) {
+    const cleaned = og.replace(/\s*-\s*LeetCode\s*$/i, '');
+    return normalizeLeetCodeTitle(cleaned);
   }
   return null;
+}
+
+function normalizeLeetCodeTitle(title) {
+  if (!title) return null;
+  const trimmed = title.trim();
+  return trimmed.replace(/^\d+\.\s*/, '');
 }
 
 export function getLeetCodeCode() {

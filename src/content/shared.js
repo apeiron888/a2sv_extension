@@ -62,7 +62,9 @@ export function createFallbackPanel() {
     const trial = parseInt(container.querySelector('#a2sv-fallback-trial').value, 10);
     const time = parseInt(container.querySelector('#a2sv-fallback-time').value, 10);
     const code = container.querySelector('#a2sv-fallback-code').value;
-    const problemTitle = document.title.split(' - ')[0];
+    const problemTitle = container.dataset.problemTitle || document.title.split(' - ')[0];
+    const platform = container.dataset.platform || 'generic';
+    const problemUrl = container.dataset.problemUrl || null;
 
     if (!code) {
       showToast('Please enter code', 'error');
@@ -82,8 +84,9 @@ export function createFallbackPanel() {
 
     try {
       const res = await submitSolution({
-        platform: 'generic',
+        platform,
         problemTitle,
+        problemUrl,
         code,
         timeTaken: time,
         trial,
@@ -112,5 +115,8 @@ export function showFallbackPanel(data = {}) {
   if (data.trial) panel.querySelector('#a2sv-fallback-trial').value = data.trial;
   if (data.time) panel.querySelector('#a2sv-fallback-time').value = data.time;
   if (data.code) panel.querySelector('#a2sv-fallback-code').value = data.code;
+  if (data.problemTitle) panel.dataset.problemTitle = data.problemTitle;
+  if (data.platform) panel.dataset.platform = data.platform;
+  if (data.problemUrl) panel.dataset.problemUrl = data.problemUrl;
   panel.style.display = 'block';
 }
