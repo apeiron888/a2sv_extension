@@ -3,6 +3,9 @@ import { getFromStorage } from './storage.js';
 const BACKEND_URL = 'https://a2sv-companion.onrender.com';
 
 export async function submitSolution(data) {
+  if (!chrome?.runtime?.id) {
+    throw new Error('Extension was reloaded. Please refresh the page.');
+  }
   const { email, groupName, groupSheetId, githubConnected } = await getFromStorage(['email', 'groupName', 'groupSheetId', 'githubConnected']);
   const group = groupName || groupSheetId;
   if (!email || !group || !githubConnected) {

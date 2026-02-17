@@ -21,7 +21,20 @@ function createFallbackToggle() {
   btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
 
   btn.addEventListener('click', () => {
-    showFallbackPanel();
+    const url = window.location.href;
+    const host = window.location.hostname.toLowerCase();
+    let platform = 'generic';
+    if (host.includes('hackerrank.com')) platform = 'hackerrank';
+    else if (host.includes('atcoder.jp')) platform = 'atcoder';
+    else if (host.includes('geeksforgeeks.org') || host.includes('practice.geeksforgeeks.org')) platform = 'geeksforgeeks';
+
+    const problemTitle = document.title.split(' - ')[0];
+
+    showFallbackPanel({
+      platform,
+      problemTitle,
+      problemUrl: url
+    });
   });
 
   document.body.appendChild(btn);

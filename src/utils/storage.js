@@ -1,12 +1,26 @@
 export async function getFromStorage(keys) {
   return new Promise((resolve) => {
-    chrome.storage.local.get(keys, resolve);
+    try {
+      if (!chrome?.runtime?.id) {
+        return resolve({});
+      }
+      chrome.storage.local.get(keys, resolve);
+    } catch (err) {
+      resolve({});
+    }
   });
 }
 
 export async function setToStorage(items) {
   return new Promise((resolve) => {
-    chrome.storage.local.set(items, resolve);
+    try {
+      if (!chrome?.runtime?.id) {
+        return resolve();
+      }
+      chrome.storage.local.set(items, resolve);
+    } catch (err) {
+      resolve();
+    }
   });
 }
 
