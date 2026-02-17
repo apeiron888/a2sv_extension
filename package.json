@@ -4,13 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --config webpack.config.js",
+    "obfuscate": "javascript-obfuscator dist --output dist --compact true --control-flow-flattening true --string-array true --string-array-encoding base64",
+    "clean-maps": "del-cli dist/**/*.map",
+    "zip": "bestzip dist.zip dist/*",
+    "package": "node scripts/package.js",
+    "package:obfuscate": "node scripts/package.js --obfuscate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "copy-webpack-plugin": "^13.0.1",
+    "del-cli": "^5.1.0",
+    "javascript-obfuscator": "^4.1.0",
+    "bestzip": "^2.2.1",
     "webpack": "^5.105.2",
     "webpack-cli": "^6.0.1"
   }

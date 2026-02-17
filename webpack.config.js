@@ -3,6 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'production',
+  devtool: false,
   entry: {
     background: './src/background.js',
     leetcode: './src/content/leetcode.js',

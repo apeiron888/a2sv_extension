@@ -22,9 +22,10 @@ Sync LeetCode, Codeforces, and other supported platforms to GitHub and the A2SV 
 - Fallback panel for other platforms
 
 ## Install (Developer Mode)
-1. Build the extension: `npx webpack --config webpack.config.js`
-2. Open Chrome → Extensions → Enable Developer Mode.
-3. Load Unpacked → select the `dist` folder.
+1. Install dependencies: `npm install`
+2. Build the extension: `npm run build`
+3. Open Chrome → Extensions → Enable Developer Mode.
+4. Load Unpacked → select the `dist` folder.
 
 ## Setup
 1. Open the extension popup.
@@ -36,6 +37,11 @@ Sync LeetCode, Codeforces, and other supported platforms to GitHub and the A2SV 
 - LeetCode: open a problem, set Trial/Time, click Sync.
 - Codeforces: open “My Submissions”, click Sync on accepted rows.
 - Other platforms: use the fallback button.
+
+## Packaging for Distribution
+- Build only: `npm run package`
+- Build + obfuscate: `npm run package -- --obfuscate` (or `npm run package:obfuscate`)
+- Output: `dist.zip` in the repo root
 
 ## Notes
 - Ensure the backend is running and you’ve connected GitHub successfully.
