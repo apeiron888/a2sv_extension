@@ -3,10 +3,17 @@
 Sync LeetCode, Codeforces, and other supported platforms to GitHub and the A2SV tracking sheet.
 
 ## Screenshots
-- Popup login/config: [/screenshots/popup.png](screenshots/popup.png)
-- LeetCode sync UI: [/screenshots/leetcode.png](screenshots/leetcode.png)
-- Codeforces sync UI: [/screenshots/codeforces.png](screenshots/codeforces.png)
-- Fallback panel: [/screenshots/fallback.png](screenshots/fallback.png)
+**Popup login/config**
+![Popup login](screenshots/popup.png)
+
+**LeetCode sync UI**
+![LeetCode sync](screenshots/leetcode.png)
+
+**Codeforces sync UI**
+![Codeforces sync](screenshots/codeforces.png)
+
+**Fallback panel**
+![Fallback panel](screenshots/fallback.png)
 
 ## Features
 - One‑click sync to GitHub and Google Sheets
