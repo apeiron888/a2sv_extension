@@ -4,38 +4,51 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="popup.css">
 </head>
-<body>
+<body class="a2sv-page">
   <div class="container">
-    <h2>A2SV Companion</h2>
-    <form id="config-form">
-      <div class="form-group">
-        <label>Email:</label>
-        <input type="email" id="email" required>
+    <div class="card">
+      <div class="brand">
+        <div class="logo">A2SV</div>
+        <div class="brand-text">
+          <h2>A2SV Companion</h2>
+          <p>Sync your solved problems to GitHub and Sheets.</p>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Full Name:</label>
-        <input type="text" id="studentName" placeholder="e.g., Jane Doe" required>
-      </div>
-      <div class="form-group">
-        <label>GitHub Handle:</label>
-        <input type="text" id="githubHandle" placeholder="e.g., janedoe" required>
-      </div>
-      <div class="form-group">
-        <label>Repo Name (optional):</label>
-        <input type="text" id="repoName" placeholder="e.g., a2sv-solutions-g7">
-      </div>
-      <div class="form-group">
-        <label>Group Name:</label>
-        <input type="text" id="groupName" placeholder="e.g., G7A" required>
-      </div>
-      <div class="form-group">
-        <button type="button" id="github-btn">Connect GitHub</button>
-        <span id="github-status"></span>
-      </div>
-      <div class="form-group">
-        <button type="submit">Save</button>
-      </div>
-    </form>
+
+      <form id="config-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label>Full name</label>
+            <input type="text" id="studentName" placeholder="Jane Doe" required>
+          </div>
+          <div class="form-group">
+            <label>GitHub handle</label>
+            <input type="text" id="githubHandle" placeholder="janedoe" required>
+          </div>
+          <div class="form-group">
+            <label>Repo name (optional)</label>
+            <input type="text" id="repoName" placeholder="a2sv-solutions-g7">
+          </div>
+          <div class="form-group">
+            <label>Group name</label>
+            <input type="text" id="groupName" placeholder="G7A" required>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="github-btn" class="btn btn-dark">Connect GitHub</button>
+          <span id="github-status" class="status-pill">Not connected</span>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Save settings</button>
+        </div>
+      </form>
+    </div>
   </div>
   <script src="popup.js"></script>
 </body>

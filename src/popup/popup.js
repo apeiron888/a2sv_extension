@@ -28,10 +28,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const setGithubStatus = (connected) => {
     if (connected) {
       githubStatus.textContent = '✓ Connected';
-      githubStatus.style.color = 'green';
+      githubStatus.style.color = '#10b981';
     } else {
       githubStatus.textContent = 'Not connected';
-      githubStatus.style.color = 'red';
+      githubStatus.style.color = '#f87171';
     }
   };
 
