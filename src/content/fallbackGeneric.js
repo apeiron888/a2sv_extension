@@ -20,7 +20,55 @@ function createFallbackToggle() {
   btn.style.cursor = 'pointer';
   btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
 
-  btn.addEventListener('click', () => {
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let startLeft = 0;
+  let startTop = 0;
+  let moved = false;
+
+  const onPointerMove = (event) => {
+    if (!isDragging) return;
+    const dx = event.clientX - startX;
+    const dy = event.clientY - startY;
+    if (!moved && Math.hypot(dx, dy) > 4) moved = true;
+    btn.style.left = `${startLeft + dx}px`;
+    btn.style.top = `${startTop + dy}px`;
+  };
+
+  const onPointerUp = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    document.removeEventListener('pointermove', onPointerMove);
+    document.removeEventListener('pointerup', onPointerUp);
+  };
+
+  btn.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0) return;
+    isDragging = true;
+    moved = false;
+    const rect = btn.getBoundingClientRect();
+    startX = event.clientX;
+    startY = event.clientY;
+    startLeft = rect.left;
+    startTop = rect.top;
+    btn.style.left = `${rect.left}px`;
+    btn.style.top = `${rect.top}px`;
+    btn.style.right = 'auto';
+    btn.style.bottom = 'auto';
+    if (btn.setPointerCapture) {
+      btn.setPointerCapture(event.pointerId);
+    }
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', onPointerUp);
+  });
+
+  btn.addEventListener('click', (event) => {
+    if (moved) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
     const url = window.location.href;
     const host = window.location.hostname.toLowerCase();
     let platform = 'generic';

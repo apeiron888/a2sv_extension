@@ -1,7 +1,5 @@
 import { getFromStorage } from './storage.js';
 
-const BACKEND_URL = 'https://a2sv-companion.onrender.com';
-
 export async function submitSolution(data) {
   if (!chrome?.runtime?.id) {
     throw new Error('Extension was reloaded. Please refresh the page.');

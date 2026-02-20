@@ -134,13 +134,53 @@ import { showToast, showFallbackPanel } from './shared.js';
 })();
 
 function detectLanguage() {
-  const selector = document.querySelector('[data-cy="lang-select"] .ant-select-selection-item');
-  if (selector) {
-    const lang = selector.innerText.toLowerCase();
-    if (lang.includes('python')) return 'python';
-    if (lang.includes('java')) return 'java';
-    if (lang.includes('c++')) return 'c++';
-    if (lang.includes('javascript')) return 'javascript';
+  const selectors = [
+    '[data-cy="lang-select"] .ant-select-selection-item',
+    '[data-e2e-locator="lang-select"] .ant-select-selection-item',
+    '[data-e2e-locator="lang-select"]',
+    'button[data-e2e-locator="lang-select"]',
+    '#editor button',
+    '[data-track-load="code_editor"] button',
+    '[data-cy="lang-select"]',
+    '.ant-select-selection-item'
+  ];
+
+  const normalize = (text) => text.toLowerCase().replace(/\s+/g, ' ').trim();
+
+  const mapLanguage = (langText) => {
+    if (!langText) return 'unknown';
+    if (langText.includes('javascript')) return 'javascript';
+    if (langText.includes('python')) return 'python';
+    if (langText.includes('c++')) return 'c++';
+    if (langText.includes('c#') || langText.includes('c sharp')) return 'c#';
+    if (langText.includes('java')) return 'java';
+    if (langText.includes('golang') || langText === 'go' || langText.startsWith('go ')) return 'go';
+    if (langText.includes('kotlin')) return 'kotlin';
+    if (langText.includes('rust')) return 'rust';
+    if (langText.includes('php')) return 'php';
+    return 'unknown';
+  };
+
+  let langText = '';
+  for (const sel of selectors) {
+    const el = document.querySelector(sel);
+    if (el && el.textContent && el.textContent.trim()) {
+      const mapped = mapLanguage(normalize(el.textContent));
+      if (mapped !== 'unknown') return mapped;
+      if (!langText) langText = normalize(el.textContent);
+    }
   }
-  return 'unknown';
+
+  if (!langText) {
+    const editorRoot = document.querySelector('#editor') || document.querySelector('[data-track-load="code_editor"]') || document.body;
+    const candidates = Array.from(editorRoot.querySelectorAll('button, span, div'))
+      .map((el) => normalize(el.textContent || ''))
+      .filter((text) => text && text.length <= 40);
+    for (const text of candidates) {
+      const mapped = mapLanguage(text);
+      if (mapped !== 'unknown') return mapped;
+    }
+  }
+
+  return mapLanguage(langText);
 }
