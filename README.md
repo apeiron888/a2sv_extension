@@ -2,18 +2,56 @@
 
 Sync LeetCode, Codeforces, and other supported platforms to GitHub and the A2SV tracking sheet.
 
-## Screenshots
+## Quick Start (with screenshots)
+Here is the quick start guide to get you up and running. (Note: For a detailed, picture-by-picture guide, check our GitHub repository linked at the bottom).
+
+### Step 0: Prepare Your GitHub
+Before installing, make sure you have a Public Repository created on your GitHub account (e.g., a2sv-solutions, my-solutions,....).
+Note: If you don't have one, the extension will try to create it for you, but having one ready is safer!
+
+### Step 1: Installation
+1. Download the extension folder.
+2. Open Chrome and navigate to chrome://extensions.
+3. Toggle Developer mode (top right) to ON.
+4. Click Load unpacked and select the dist folder from the extension files.
+📌 Pro Tip: Pin the extension to your toolbar immediately!
+
+### Step 2: Configuration (The Important Part)
+1. Click the extension icon and open the Settings/Popup.
+2. Enter your details exactly as they appear on the progress sheet:
+   - Full Name (Case sensitive!)
+   - GitHub Handle & Email
+   - Repo Name & Group Name (e.g., G7A)
+3. Click Connect GitHub, authorize the app, close the success tab, and hit SAVE.
+
 **Popup login/config**
 ![Popup login](screenshots/popup.png)
+
+### Step 3: How to Submit
+LeetCode: You’ll see a Sync button near the submit area. Enter your Trial/Time and click!
 
 **LeetCode sync UI**
 ![LeetCode sync](screenshots/leetcode.png)
 
+Codeforces: Go to your My Submissions page. Enter your Trial/Time. Click the ⚡️ Sync button on any "Accepted" row.
+
 **Codeforces sync UI**
 ![Codeforces sync](screenshots/codeforces.png)
 
+Other Platforms: Use the draggable A2SV popup to fill in your info and submit.
+Fallback: If "Sync" ever fails, click the Fallback button to manually paste your code and submit.
+
 **Fallback panel**
 ![Fallback panel](screenshots/fallback.png)
+
+### Step 4: What Happens Next?
+Sit back. The extension automatically pushes your code directly to your GitHub repo AND logs your submission link and time into the Google Sheet!
+
+### Crucial Reminders & Troubleshooting
+- Exact match required: Your name must match the Google Sheet exactly, otherwise you will get a "Student not found" error.
+- "Question not found" error: Make sure the problem is actually on the sheet. If it is, wait a moment and retry.
+- "Unauthorized / GitHub token missing": Go to settings and reconnect your GitHub.
+- If the Submit button isn’t appearing, refresh the problem page.
 
 ## Features
 - One‑click sync to GitHub and Google Sheets
@@ -46,3 +84,6 @@ Sync LeetCode, Codeforces, and other supported platforms to GitHub and the A2SV 
 ## Notes
 - Ensure the backend is running and you’ve connected GitHub successfully.
 - If you update the extension, reload the unpacked extension and refresh the tab.
+
+## Repository
+Add your GitHub repository link here.
