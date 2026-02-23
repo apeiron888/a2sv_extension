@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-chrome.action.onClicked.addListener(() => {
+(chrome.action || chrome.browserAction).onClicked.addListener(() => {
   chrome.runtime.openOptionsPage();
 });
 

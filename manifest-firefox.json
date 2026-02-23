@@ -1,0 +1,68 @@
+{
+  "manifest_version": 2,
+  "name": "A2SV Companion",
+  "version": "1.0.0",
+  "description": "Sync LeetCode/Codeforces submissions to GitHub & Google Sheets",
+  "permissions": [
+    "storage",
+    "tabs",
+    "https://leetcode.com/*",
+    "https://codeforces.com/*",
+    "https://a2sv-companion.onrender.com/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_title": "A2SV Companion",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_page": "pages/options.html",
+  "content_scripts": [
+    {
+      "matches": ["https://leetcode.com/problems/*"],
+      "js": ["leetcode.js"],
+      "css": ["inject.css"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://codeforces.com/contest/*/problem/*",
+        "https://codeforces.com/problemset/problem/*",
+        "https://codeforces.com/contest/*/my"
+      ],
+      "js": ["codeforces.js"],
+      "css": ["inject.css"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://atcoder.jp/*",
+        "https://www.hackerrank.com/challenges/*",
+        "https://www.hackerrank.com/contests/*/challenges/*",
+        "https://practice.geeksforgeeks.org/problems/*",
+        "https://www.geeksforgeeks.org/problems/*"
+      ],
+      "js": ["fallbackGeneric.js"],
+      "css": ["inject.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": ["fallback.html", "leetcodeCodeInjector.js"],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "applications": {
+    "gecko": {
+      "id": "a2sv-companion@a2sv.org",
+      "strict_min_version": "57.0"
+    }
+  }
+}
