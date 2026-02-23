@@ -9,10 +9,6 @@
 <body>
   <h1>GitHub Connected!</h1>
   <p>You may close this tab.</p>
-  <script>
-    chrome.runtime.sendMessage({ type: 'GITHUB_SUCCESS' }, () => {
-      setTimeout(window.close, 2000);
-    });
-  </script>
+  <script src="success.js"></script>
 </body>
 </html>
