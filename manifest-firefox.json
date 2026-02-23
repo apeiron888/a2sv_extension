@@ -5,7 +5,6 @@
   "description": "Sync LeetCode/Codeforces submissions to GitHub & Google Sheets",
   "permissions": [
     "storage",
-    "tabs",
     "https://leetcode.com/*",
     "https://codeforces.com/*",
     "https://a2sv-companion.onrender.com/*"
