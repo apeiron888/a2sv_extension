@@ -58,7 +58,7 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "a2sv-companion@a2sv.org",
       "strict_min_version": "57.0"
