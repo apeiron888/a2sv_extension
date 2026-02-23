@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js",
+    "build:firefox": "webpack --config webpack.config.js --env target=firefox",
     "obfuscate": "javascript-obfuscator dist --output dist --compact true --control-flow-flattening true --string-array true --string-array-encoding base64",
     "clean-maps": "del-cli dist/**/*.map",
     "zip": "bestzip dist.zip dist/*",

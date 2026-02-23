@@ -19,7 +19,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-chrome.action.onClicked.addListener(() => {
+const action = chrome.action || chrome.browserAction;
+action?.onClicked.addListener(() => {
   chrome.runtime.openOptionsPage();
 });
 
