@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
   if (message.type === 'FETCH_CF_CODE') {
-    fetchCodeforcesCode(message.contestId, message.submissionId).then(sendResponse);
+    fetchCodeforcesCode(message.submissionUrl, message.contestId, message.submissionId).then(sendResponse);
     return true;
   }
   if (message.type === 'GITHUB_SUCCESS') {
@@ -36,8 +36,13 @@ async function handleSubmit(data) {
   }
 }
 
-async function fetchCodeforcesCode(contestId, submissionId) {
-  const url = `https://codeforces.com/contest/${contestId}/submission/${submissionId}`;
+async function fetchCodeforcesCode(submissionUrl, contestId, submissionId) {
+  const url = submissionUrl || (contestId && submissionId
+    ? `https://codeforces.com/contest/${contestId}/submission/${submissionId}`
+    : null);
+  if (!url) {
+    return { error: 'Missing submission URL' };
+  }
   try {
     const response = await fetch(url, { credentials: 'include' });
     const html = await response.text();

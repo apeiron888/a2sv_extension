@@ -71,6 +71,10 @@ import { showToast, showFallbackPanel } from './shared.js';
       syncBtn.title = 'Sync to A2SV';
 
       const submissionId = row.getAttribute('data-submission-id');
+      const submissionLink = row.querySelector('a[href*="/submission/"]');
+      const submissionUrl = submissionLink
+        ? new URL(submissionLink.getAttribute('href'), window.location.origin).toString()
+        : null;
       const problemLink = row.querySelector('td[data-problemid] a');
       let contestId = null;
       if (problemLink) {
@@ -99,15 +103,15 @@ import { showToast, showFallbackPanel } from './shared.js';
         const trial = parseInt(trialInput.value, 10) || 1;
         const time = parseInt(timeInput.value, 10) || 0;
 
-        if (!contestId || !submissionId) {
-          showToast('Missing contest or submission ID', 'error');
+        if (!submissionUrl && (!contestId || !submissionId)) {
+          showToast('Missing submission URL or contest/submission ID', 'error');
           syncBtn.disabled = false;
           syncBtn.textContent = '⚡ Sync';
           return;
         }
 
         chrome.runtime.sendMessage(
-          { type: 'FETCH_CF_CODE', contestId, submissionId },
+          { type: 'FETCH_CF_CODE', submissionUrl, contestId, submissionId },
           async (response) => {
             if (chrome.runtime.lastError || response?.error || !response?.code) {
               showToast('Could not fetch code. Opening fallback...', 'error');
