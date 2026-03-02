@@ -16,6 +16,15 @@ Note: If you don't have one, the extension will try to create it for you, but ha
 4. Click Load unpacked and select the dist folder from the extension files.
 📌 Pro Tip: Pin the extension to your toolbar immediately!
 
+### Firefox Installation (Temporary Add-on)
+1. Build Firefox package:
+   - `npm run package:firefox`
+2. Open Firefox and go to `about:debugging#/runtime/this-firefox`.
+3. Click **Load Temporary Add-on**.
+4. Select `dist/manifest.json`.
+
+Note: Temporary add-ons are removed when Firefox closes. Reload from `about:debugging` when needed.
+
 ### Step 2: Configuration (The Important Part)
 1. Click the extension icon and open the Settings/Popup.
 2. Enter your details exactly as they appear on the progress sheet:
@@ -61,9 +70,16 @@ Sit back. The extension automatically pushes your code directly to your GitHub r
 
 ## Install (Developer Mode)
 1. Install dependencies: `npm install`
-2. Build the extension: `npm run build`
+2. Build the extension:
+   - Chrome/Chromium: `npm run package`
+   - Firefox: `npm run package:firefox`
 3. Open Chrome → Extensions → Enable Developer Mode.
 4. Load Unpacked → select the `dist` folder.
+
+### Firefox (Developer Mode)
+1. Run `npm run package:firefox`.
+2. Open `about:debugging#/runtime/this-firefox`.
+3. Click **Load Temporary Add-on** and choose `dist/manifest.json`.
 
 ## Setup
 1. Open the extension popup.
@@ -81,9 +97,15 @@ Sit back. The extension automatically pushes your code directly to your GitHub r
 - Build + obfuscate: `npm run package -- --obfuscate` (or `npm run package:obfuscate`)
 - Output: `dist.zip` in the repo root
 
+### Firefox Packaging
+- Build Firefox package: `npm run package:firefox`
+- Build Firefox package + obfuscate: `npm run package:firefox:obfuscate`
+- Output: `dist-firefox.zip` in the repo root
+
 ## Notes
 - Ensure the backend is running and you’ve connected GitHub successfully.
 - If you update the extension, reload the unpacked extension and refresh the tab.
+- Firefox note: some Firefox channels disable MV3 `background.service_worker`; use `npm run package:firefox` for compatibility.
 
 ## Repository
  - Repo: https://github.com/apeiron888/a2sv_extension

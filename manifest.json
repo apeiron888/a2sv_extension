@@ -1,16 +1,25 @@
 {
   "manifest_version": 3,
   "name": "A2SV Companion",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Sync LeetCode/Codeforces submissions to GitHub & Google Sheets",
-  "permissions": ["storage"],
+  "permissions": ["storage", "alarms"],
   "host_permissions": [
     "https://leetcode.com/*",
     "https://codeforces.com/*",
-    "https://a2sv-companion.onrender.com/*"
+    "https://a2sv-companion.onrender.com/*",
+    "https://a2sv-companion-backend.onrender.com/*",
+    "https://companion-u9zk.onrender.com/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "a2sv-companion@a2sv.org",
+      "strict_min_version": "109.0"
+    }
   },
   "action": {
     "default_title": "A2SV Companion",
@@ -31,8 +40,10 @@
     {
       "matches": [
         "https://codeforces.com/contest/*/problem/*",
-        "https://codeforces.com/problemset/problem/*",
-        "https://codeforces.com/contest/*/my"
+        "https://codeforces.com/contest/*/my",
+        "https://codeforces.com/problemset/problem/*/*",
+        "https://codeforces.com/gym/*/problem/*",
+        "https://codeforces.com/group/*/contest/*/problem/*"
       ],
       "js": ["codeforces.js"],
       "css": ["inject.css"],
@@ -62,4 +73,4 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   }
-} 
+}
