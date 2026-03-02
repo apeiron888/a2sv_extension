@@ -2,6 +2,7 @@ import { fetchFromBackend } from './utils/config.js';
 import { storageSet, storageGet } from './utils/browser.js';
 
 const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+const actionAPI = browserAPI.action || browserAPI.browserAction;
 
 // ─── Keep-alive: ping backend every 14 minutes to prevent Render cold starts ─
 browserAPI.alarms.create('keepAlive', { periodInMinutes: 14 });
@@ -40,9 +41,11 @@ browserAPI.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // ─── Extension icon click ──────────────────────────────────────────────────────
-browserAPI.action.onClicked.addListener(() => {
-  browserAPI.runtime.openOptionsPage();
-});
+if (actionAPI && actionAPI.onClicked) {
+  actionAPI.onClicked.addListener(() => {
+    browserAPI.runtime.openOptionsPage();
+  });
+}
 
 // ─── Submit handler with timeout and error classification ──────────────────────
 async function handleSubmit(data) {

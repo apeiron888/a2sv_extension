@@ -74,12 +74,12 @@ Sit back. The extension automatically pushes your code directly to your GitHub r
    - Chrome/Chromium: `npm run package`
    - Firefox: `npm run package:firefox`
 3. Open Chrome → Extensions → Enable Developer Mode.
-4. Load Unpacked → select the `dist` folder.
+4. Load Unpacked → select the `dist` folder (Chrome MV3 build).
 
 ### Firefox (Developer Mode)
 1. Run `npm run package:firefox`.
 2. Open `about:debugging#/runtime/this-firefox`.
-3. Click **Load Temporary Add-on** and choose `dist/manifest.json`.
+3. Click **Load Temporary Add-on** and choose `dist-firefox/manifest.json`.
 
 ## Setup
 1. Open the extension popup.
@@ -96,6 +96,16 @@ Sit back. The extension automatically pushes your code directly to your GitHub r
 - Build only: `npm run package`
 - Build + obfuscate: `npm run package -- --obfuscate` (or `npm run package:obfuscate`)
 - Output: `dist.zip` in the repo root
+
+### Legacy Chromium Packaging (MV2)
+- Build legacy package: `npm run package:legacy`
+- Build legacy package + obfuscate: `npm run package:legacy:obfuscate`
+- Output: `dist-legacy.zip` in the repo root
+
+For unpacked install on old Chromium builds, load from `dist-legacy`.
+
+Use this only for older Chromium-based browsers that fail with "unsupported manifest version".
+Your main package remains MV3 and is unchanged.
 
 ### Firefox Packaging
 - Build Firefox package: `npm run package:firefox`

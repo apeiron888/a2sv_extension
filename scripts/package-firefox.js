@@ -7,7 +7,9 @@ const shouldObfuscate = args.has('--obfuscate');
 
 const rootDir = path.resolve(__dirname, '..');
 const manifestPath = path.join(rootDir, 'manifest.json');
-const distManifestPath = path.join(rootDir, 'dist', 'manifest.json');
+const distDir = path.join(rootDir, 'dist');
+const firefoxDir = path.join(rootDir, 'dist-firefox');
+const firefoxManifestPath = path.join(firefoxDir, 'manifest.json');
 
 const run = (cmd) => {
   execSync(cmd, { stdio: 'inherit' });
@@ -16,6 +18,11 @@ const run = (cmd) => {
 function writeFirefoxManifest() {
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
+  if (fs.existsSync(firefoxDir)) {
+    fs.rmSync(firefoxDir, { recursive: true, force: true });
+  }
+  fs.cpSync(distDir, firefoxDir, { recursive: true });
+
   // Firefox on some channels may have MV3 service workers disabled.
   // Use background.scripts for compatibility with temporary add-on installs.
   manifest.background = {
@@ -23,8 +30,8 @@ function writeFirefoxManifest() {
     type: 'module',
   };
 
-  fs.writeFileSync(distManifestPath, JSON.stringify(manifest, null, 2));
-  console.log('[package:firefox] Wrote Firefox-compatible dist/manifest.json');
+  fs.writeFileSync(firefoxManifestPath, JSON.stringify(manifest, null, 2));
+  console.log('[package:firefox] Wrote Firefox-compatible dist-firefox/manifest.json');
 }
 
 run('npm run build');
@@ -36,4 +43,4 @@ if (shouldObfuscate) {
 writeFirefoxManifest();
 
 run('npm run clean-maps');
-run('bestzip dist-firefox.zip dist/*');
+run('bestzip dist-firefox.zip dist-firefox/*');

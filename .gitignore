@@ -1,4 +1,8 @@
 .env
 node_modules/
 dist/
+dist-firefox/
+dist-legacy/
 dist.zip
+dist-firefox.zip
+dist-legacy.zip

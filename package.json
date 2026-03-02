@@ -10,6 +10,8 @@
     "zip": "bestzip dist.zip dist/*",
     "package": "node scripts/package.js",
     "package:obfuscate": "node scripts/package.js --obfuscate",
+    "package:legacy": "node scripts/package-legacy.js",
+    "package:legacy:obfuscate": "node scripts/package-legacy.js --obfuscate",
     "package:firefox": "node scripts/package-firefox.js",
     "package:firefox:obfuscate": "node scripts/package-firefox.js --obfuscate"
   },
