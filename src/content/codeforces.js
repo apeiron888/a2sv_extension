@@ -226,7 +226,7 @@ class CodeforcesParser {
             console.log('[A2SV][submit-response]', { source: 'codeforces', response: res });
 
             if (res.success) {
-              showToast('Processing…', 'info', 2500);
+              showToast('Submitting…', 'info', 2500);
               await incrementAttempt('codeforces', problemSlug);
               trialInput.value = (trial + 1).toString();
               if (res.jobId) {

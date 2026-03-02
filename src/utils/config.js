@@ -1,6 +1,6 @@
 export const BACKEND_URLS = [
-	'https://companion-u9zk.onrender.com',
-	'https://a2sv-companion-backend.onrender.com',
+	// 'https://companion-u9zk.onrender.com',
+	// 'https://a2sv-companion-backend.onrender.com',
 	'https://a2sv-companion.onrender.com',
 ];
 

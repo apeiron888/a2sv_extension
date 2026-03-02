@@ -189,7 +189,7 @@ export function createFallbackPanel() {
       console.log('[A2SV][submit-response]', { source: 'fallback', response: res });
 
       if (res.success) {
-        showToast('Processing…', 'info', 2500);
+        showToast('Submitting…', 'info', 2500);
         if (res.jobId) {
           monitorSubmissionJob(res.jobId, 'fallback');
         }

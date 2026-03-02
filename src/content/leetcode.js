@@ -119,7 +119,7 @@ import { showToast, showFallbackPanel, monitorSubmissionJob } from './shared.js'
         console.log('[A2SV][submit-response]', { source: 'leetcode', response: res });
 
         if (res.success) {
-          showToast('Processing…', 'info', 2500);
+          showToast('Submitting…', 'info', 2500);
           await incrementAttempt('leetcode', problemSlug);
           trialInput.value = (trial + 1).toString();
           if (res.jobId) {
