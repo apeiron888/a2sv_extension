@@ -1,19 +1,18 @@
-import { getFromStorage } from './storage.js';
+import { sendMessage, storageGet } from './browser.js';
 
 export async function submitSolution(data) {
-  if (!chrome?.runtime?.id) {
-    throw new Error('Extension was reloaded. Please refresh the page.');
+  const api = typeof browser !== 'undefined' ? browser : chrome;
+  if (!api?.runtime?.id) {
+    throw new Error('Extension was reloaded. Please refresh the page and try again.');
   }
-  const { email, groupName, groupSheetId, githubConnected } = await getFromStorage(['email', 'groupName', 'groupSheetId', 'githubConnected']);
+  const { email, groupName, groupSheetId } = await storageGet(['email', 'groupName', 'groupSheetId']);
   const group = groupName || groupSheetId;
-  if (!email || !group || !githubConnected) {
-    throw new Error('Please configure your email, group name, and connect GitHub in the extension popup.');
+  if (!email) {
+    throw new Error('Your email is not set. Please open the extension options and fill in your email.');
   }
-  const fullData = { ...data, email };
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ type: 'SUBMIT', data: fullData }, (response) => {
-      if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
-      else resolve(response);
-    });
-  });
+  if (!group) {
+    throw new Error('Your group is not set. Please open the extension options and fill in your group name or sheet ID.');
+  }
+  const fullData = { ...data, email, groupSheetId: groupSheetId || groupName };
+  return sendMessage({ type: 'SUBMIT', data: fullData });
 }

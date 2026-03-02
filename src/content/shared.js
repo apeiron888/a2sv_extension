@@ -1,9 +1,10 @@
 import { getFromStorage } from '../utils/storage.js';
 import { submitSolution } from '../utils/api.js';
+import { sendMessage } from '../utils/browser.js';
 
 let fallbackPanel = null;
 
-export function showToast(message, type = 'info') {
+export function showToast(message, type = 'info', durationMs = 3000) {
   const toast = document.createElement('div');
   toast.textContent = message;
   toast.style.position = 'fixed';
@@ -15,7 +16,44 @@ export function showToast(message, type = 'info') {
   toast.style.zIndex = '10000';
   toast.style.backgroundColor = type === 'error' ? '#f44336' : '#4caf50';
   document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+  setTimeout(() => toast.remove(), durationMs);
+}
+
+export function monitorSubmissionJob(jobId, source = 'unknown', options = {}) {
+  const {
+    initialDelayMs = 4000,
+    intervalMs = 4000,
+    maxAttempts = 18,
+  } = options;
+
+  if (!jobId) return;
+
+  (async () => {
+    try {
+      await new Promise(resolve => setTimeout(resolve, initialDelayMs));
+
+      for (let i = 0; i < maxAttempts; i++) {
+        const status = await sendMessage({ type: 'POLL_STATUS', jobId });
+        console.log('[A2SV][job-status]', { source, jobId, attempt: i + 1, status });
+
+        if (status?.status === 'done') {
+          return;
+        }
+
+        if (status?.status === 'error') {
+          showToast('Sync failed. Check console.', 'error', 5000);
+          console.error('[A2SV][job-error]', { source, jobId, error: status?.errorMessage, status });
+          return;
+        }
+
+        await new Promise(resolve => setTimeout(resolve, intervalMs));
+      }
+
+      console.warn('[A2SV][job-timeout]', { source, jobId, maxAttempts });
+    } catch (err) {
+      console.error('[A2SV][job-monitor-crash]', { source, jobId, error: err?.message || String(err) });
+    }
+  })();
 }
 
 export function createFallbackPanel() {
@@ -148,14 +186,21 @@ export function createFallbackPanel() {
         trial,
         language
       });
+      console.log('[A2SV][submit-response]', { source: 'fallback', response: res });
+
       if (res.success) {
-        showToast('Submitted!');
+        showToast('Processing…', 'info', 2500);
+        if (res.jobId) {
+          monitorSubmissionJob(res.jobId, 'fallback');
+        }
         container.style.display = 'none';
       } else {
-        showToast(res.error || 'Error', 'error');
+        console.error('[A2SV][submit-failed]', { source: 'fallback', response: res });
+        showToast('Submission failed. Check console.', 'error', 4500);
       }
     } catch (err) {
-      showToast(err.message, 'error');
+      console.error('[A2SV][submit-exception]', { source: 'fallback', error: err?.message || String(err) });
+      showToast('Submission failed. Check console.', 'error', 4500);
     } finally {
       btn.disabled = false;
       btn.textContent = 'Submit';
