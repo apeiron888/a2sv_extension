@@ -110,6 +110,7 @@ input:focus {
   align-items: center;
   gap: 10px;
   margin-top: 12px;
+  flex-wrap: wrap;
 }
 
 .btn {
@@ -152,4 +153,36 @@ input:focus {
   background: #f9fafb;
   color: var(--muted);
   border: 1px solid var(--border);
+}
+
+.status-message {
+  margin: 10px 2px 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--muted);
+  min-height: 16px;
+}
+
+.status-message.success {
+  color: var(--success);
+}
+
+.status-message.error {
+  color: #dc2626;
+}
+
+.status-message.info {
+  color: #2563eb;
+}
+
+@media (max-width: 360px) {
+  body.a2sv-page {
+    width: 100%;
+    min-width: 300px;
+    padding: 12px;
+  }
+
+  .card {
+    padding: 12px;
+  }
 }
